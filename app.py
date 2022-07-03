@@ -15,14 +15,16 @@ def connect(x):
 
 @eel.expose
 def setProgram(x):
+    if switcher.connected == False:
+        switcher.connect(x)
     switcher.setProgramInputVideoSource(0, int(x)+1)
     return
 
 @eel.expose
 def setPreview(x):
+    if switcher.connected == False:
+        switcher.connect(x)
     switcher.setPreviewInputVideoSource(0, int(x)+1)
-
-
 
 
 eel.start("index.html")
