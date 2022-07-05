@@ -27,4 +27,4 @@ def setPreview(x):
     switcher.setPreviewInputVideoSource(0, int(x)+1)
 
 
-eel.start("index.html")
+eel.start("index.html", mode='default')
