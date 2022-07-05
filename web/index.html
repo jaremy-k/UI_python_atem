@@ -1,164 +1,236 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <meta charset="UTF-8">
-    <title>Blackmagic, go sleep!!!</title>
-    <script src="eel.js"></script>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google" content="notranslate" />
-    <script type="text/javascript" src="lib/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="config.js"></script>
+	<title>Desk</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="eel.js"></script>
+	<script type="text/javascript" src="lib/jquery-3.5.1.min.js"></script>
+	<script type="text/javascript" src="config.js"></script>
 </head>
-<body style="height: 100vh; width: 100vw; overflow: hidden; background: #F6F4FE;">
-<!--    <div id="ConnetionPage" style="background: #F6F4FE; visibility: visible; position: fixed; width: 100vw; height: 100vh; z-index: 999">-->
-<!--        <div class="row pt-3">-->
-<!--            <div class="mt-5 input-group col-md-6">-->
-<!--                <div class="col-3 m-auto mt-5 pb-4">-->
-<!--                    <input type="text" class="form-control mt-5" placeholder="IP" aria-label="IP" name="ip" id="ip">-->
-<!--                    <button id="connect" class="mt-2 w-100 btn btn-primary">Connect</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-    <div>
-        <div class="header bg-white shadow-sm">
-            <div class="container pt-2 pb-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page">Switcher</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link">Audio</a>
-                  </li>
-                  <!-- <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
-                  </li> -->
-                </ul>
-            </div>    
+<body oncontextmenu="return false">
+	 <div class="header h-gray">
+        <div class="container pt-2 pb-2">
+            <ul class="nav nav-pills">
+              <li class="nav-item">
+                <a class="nav-link active activePage" id="video" aria-current="page">Video</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link">Audio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="settings">Settings</a>
+              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled">Disabled</a>
+              </li> -->
+            </ul>
         </div>
-        <div class="container">
-            <div class="row mt-4">
-                <div class="col-8">
-                    <div class="col pb-4">
-                        <h5 class="pb-2">Program</h5>
-                        <div class="row">
-                            <button id="cam1" class="shadow-sm btn bg-warning" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                1
-                            </button>
-                            <button id="cam2" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                2
-                            </button>
-                            <button id="cam3" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                3
-                            </button>
-                            <button id="camPC" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                PC
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col pb-4">
-                        <h5 class="pb-2">Preview</h5>
-                        <div class="row">
-                            <button id="camPreview1" class="shadow-sm btn bg-warning" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                1
-                            </button>
-                            <button id="camPreview2" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                2
-                            </button>
-                            <button id="camPreview3" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                3
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="rounded" style="width: 7vw; height: 50vh;">
-                        <div class="middle">
-                            <div class="slider-container shadow-sm">
-                                <span class="bar"><span class="fill"></span></span>
-                                <input id="slider" class="slider" type="range" min="0" max="100" value="0" >
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="container">
-            <div class="row mt-4">
-                <div class="col-8">
-                    <div class="col pb-4">
-                        <h5 class="pb-2">Program</h5>
-                        <div class="row">
-                            <button id="cam1" class="shadow-sm btn bg-warning" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                1
-                            </button>
-                            <button id="cam2" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                2
-                            </button>
-                            <button id="cam3" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                3
-                            </button>
-                            <button id="camPC" class="ms-4 shadow-sm btn bg-white" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; color: rgba(0,0,0,0.5);text-align: center; align-content: center; justify-content: center;">
-                                PC
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
-    <script>
+	<div id="videoContainer" class="container">
+        <div class="row mt-4">
+            <div class="col-8">
+                <div class="col pb-4">
+                    <h5 class="pb-2 text-light">Program</h5>
+                    <div class="row">
+                        <button id="cam1" class="shadow-sm activeC" tabindex="-1" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center;">
+                            1
+                        </button>
+                        <button id="cam2" class="ms-1 shadow-sm deactiveC" tabindex="-1" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center;">
+                            2
+                        </button>
+                        <button id="cam3" class="ms-1 shadow-sm deactiveC" tabindex="-1" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center;">
+                            3
+                        </button>
+                        <button id="camPC" class="ms-1 shadow-sm deactiveC" tabindex="-1" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center;">
+                            PC
+                        </button>
+                    </div>
+                </div>
+                <div class="col pb-4">
+                    <h5 class="pb-2 text-light">Preview</h5>
+                    <div class="row">
+                        <button id="camPreview1" class="shadow-sm activeC" tabindex="-1" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center; position: relative;">
+                        	<!-- <div class="timer">5:00</div> -->
+                            1
+                        </button>
+                        <button id="camPreview2" class="ms-1 shadow-sm deactiveC"  tabindex="-1"style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center; position: relative;">
+                            2
+                        </button>
+                        <button id="camPreview3" class="ms-1 shadow-sm deactiveC" tabindex="-1" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center; position: relative;">
+                            3
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="rounded" style="width: 7vw; height: 50vh;">
+                    <div class="middle">
+                        <div class="slider-container shadow-sm">
+                            <span class="bar"><span class="fill"></span></span>
+                            <input id="slider" class="slider" type="range" min="0" max="100" value="0" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="settingsConatiner" class="container hiddenContainer">
+		<div class="row">
+			<h5 class="pb-2 text-light mt-4">Switchers</h5>
+			<div class="input-group col-md-6">
+				<div class="col-3 m-0 pb-4">
+					<input type="text" class="text-form" placeholder="Switcher 1" aria-label="Switcher 1" name="switcher_1" id="switcher_1">
+					<input type="text" class="text-form mt-3" placeholder="Switcher 2" aria-label="Switcher 2" name="switcher_2" id="switcher_2">
+				</div>
+			</div>
+            <h5 class="text-light">ProPresenter</h5>
+            <div class="input-group col-md-6">
+				<div class="col-3 m-0 pb-4">
+                    <div class="form-check form-switch mt-1 w-100">
+                        <input class="form-check-input" type="checkbox" role="switch" onclick="this.blur();" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault" style="color: #fff">ProPresenter Linking</label>
+                    </div>
+					<input type="text" class="text-form mt-3" placeholder="ProPresenter IP" aria-label="ProPresenter IP" name="PP_ip" id="PP_ip">
+					<input type="text" class="text-form mt-3" placeholder="ProPresenter Port" aria-label="ProPresenter Port" name="PP_port" id="PP_port">
+                    <input type="text" class="text-form mt-3" placeholder="ProPresenter Password" aria-label="ProPresenter Password" name="PP_pwd" id="PP_pwd">
+					<button id="saveSettings" class="mt-3 w-100 p-1" style="background: #02EAD2; border: 2px solid #02EAD2; font-weight: 600;">Save</button>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="w-100 row justify-content-center" style="position: absolute; bottom: 3vh;">
+        <div class="col-6" style="width: 50vw;">
+            <div class="row justify-content-end mt-2 alertHidden" id="alert_pp" style="background: #362028; padding: 1vh;">
+                <div class="col ms-2" style="font-weight: 600; font-size: 1.5vh; line-height: 3.25vh; color: #EA96B0">НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ К PROPRESENTER</div>
+                <button class="me-4 col-2" id="dis_pp" style="background: none; font-size: 1.5vh; color: #EA96B0; font-weight: 600; border: none">DISMISS</button>
+                <button class="me-4 col-2" id="act_pp" style="background: #EA96B0; font-size: 1.5vh; border: 2px solid #EA96B0; font-weight: 600;">ACTION</button>
+            </div>
+            <div class="row justify-content-end mt-2 alertHidden" id="alert_s1" style="background: #362028; padding: 1vh;">
+                <div class="col ms-2" style="font-weight: 600; font-size: 1.5vh; line-height: 3.25vh; color: #EA96B0">НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ К SWITCHER 1</div>
+                <button  class="me-4 col-2" id="dis_s1" style="background: none; font-size: 1.5vh; color: #EA96B0; font-weight: 600; border: none">DISMISS</button>
+                <button  class="me-4 col-2" id="act_s1" style="background: #EA96B0; font-size: 1.5vh; border: 2px solid #EA96B0; font-weight: 600;">ACTION</button>
+            </div>
+            <div class="row justify-content-end mt-2 alertHidden" id="alert_s2" style="background: #362028; padding: 1vh;">
+                <div class="col ms-2" style="font-weight: 600; font-size: 1.5vh; line-height: 3.25vh; color: #EA96B0">НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ К SWITCHER 2</div>
+                <button  class="me-4 col-2" id="dis_s2" style="background: none; font-size: 1.5vh; color: #EA96B0; font-weight: 600; border: none">DISMISS</button>
+                <button  class="me-4 col-2" id="act_s2" style="background: #EA96B0; font-size: 1.5vh; border: 2px solid #EA96B0; font-weight: 600;">ACTION</button>
+            </div>
+        </div>
+     </div>
+	<script type="text/javascript">
 
-        var $slider = $("#slider");
+        async function getJSON_Data() {
+          return fetch('config.JSON').then(res => res.json());
+        }
+
+        async function init_config() {
+            const res  = await getJSON_Data();
+            document.getElementById("switcher_1").value = res['Switcher 1'];
+            document.getElementById("switcher_2").value = res['Switcher 2'];
+            document.getElementById("flexSwitchCheckDefault").checked = res['propresenter_linking'];
+        }
+
+        init_config();
+
+		var $slider = $("#slider");
         var $fill = $(".bar .fill");
+        var cCamName = 'cam1';
+        var cPreviewCamName = 'camPreview1';
+        var PC_State = false;
+        var currentContainer = "videoContainer";
+        var currentNav = "video";
+
+        function swapCam(inCam, bSmooth = false) {
+            document.getElementById(cCamName).classList.remove("activeC");
+            document.getElementById(cCamName).classList.add("deactiveC");
+            cCamName = inCam;
+            document.getElementById(inCam).classList.remove("deactiveC");
+            document.getElementById(inCam).classList.add("activeC");
+            document.getElementById(inCam).blur();
+            // eel.setProgram(inCam[inCam.length - 1]);
+        }
+
+        function swapPreviewCam(inCam, bSmooth = false) {
+            document.getElementById(cPreviewCamName).classList.remove("activeC");
+            document.getElementById(cPreviewCamName).classList.add("deactiveC");
+            cPreviewCamName = inCam;
+            document.getElementById(inCam).classList.remove("deactiveC");
+            document.getElementById(inCam).classList.add("activeC");
+            document.getElementById(inCam).blur();
+            // eel.setPreview(inCam[inCam.length - 1]);
+        }
+
+        function previewToProgram() {
+        	var c = cCamName;
+        	swapCam("cam"+cPreviewCamName[cPreviewCamName.length - 1]);
+            swapPreviewCam('camPreview' + c[c.length - 1]);
+        }
+
+        function activatePC() {
+            document.getElementById("camPC").classList.remove("deactivePC");
+            document.getElementById("camPC").classList.add("activePC");
+            document.getElementById("camPC").blur();
+            PC_State = true;
+        }
+
+        function deactivatePC() {
+            document.getElementById("camPC").classList.remove("activePC");
+            document.getElementById("camPC").classList.add("deactivePC");
+            document.getElementById("camPC").blur();
+            PC_State = false;
+        }
+
+        function switchPC() {
+        	console.log(PC_State);
+            if (!PC_State)
+                activatePC();
+            else
+                deactivatePC();
+        }
+
+        function settings() {
+            document.getElementById(currentContainer).classList.add("hiddenContainer");
+        	document.getElementById('settingsConatiner').classList.remove("hiddenContainer");
+        	document.getElementById(currentNav).classList.remove("active");
+        	document.getElementById("settings").classList.add("active");
+        	currentNav = "settings";
+        	currentContainer = 'settingsConatiner';
+        }
+
+	    async function init() {
+            await eel.init() (function(params){
+                swapPreviewCam('camPreview' + params[0]);
+                swapCam('cam' + params[1]);
+            });
+        }
 
         function setBar() {
             $fill.css("height", $slider.val() + "%");
-            // Send MIX rate
+            eel.setMixState($slider.val());
         }
 
-        $slider.on("input", setBar);
-
-        setBar();
-
-        var cCamName = 'cam1';
-        var cPreviewCamName = 'camPreview1';
-        var PC_Sate = false;
-
-<!--        async function connect() {-->
-<!--            await eel.connect(document.getElementById('ip').value) (function(valid){                   -->
-<!--                if (valid) {-->
-<!--                    document.getElementById('ConnetionPage').remove();-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
-
-<!--        document.getElementById('connect').onclick = function() { connect(); }-->
-
-        function swapCam(inCam) {
-            document.getElementById(cCamName).classList.remove("bg-warning");
-            document.getElementById(cCamName).classList.add("bg-white");
-            cCamName = inCam;
-            document.getElementById(inCam).classList.remove("bg-white");
-            document.getElementById(inCam).classList.add("bg-warning");
-            eel.setProgram(document.getElementById(inCam).innerHTML);
+        function hideAlert(a_name) {
+            document.getElementById(a_name).classList.add("alertHiddenFinal");
         }
 
-        function swapPreviewCam(inCam) {
-            document.getElementById(cPreviewCamName).classList.remove("bg-warning");
-            document.getElementById(cPreviewCamName).classList.add("bg-white");
-            cPreviewCamName = inCam;
-            document.getElementById(inCam).classList.remove("bg-white");
-            document.getElementById(inCam).classList.add("bg-warning");
-            eel.setPreview(document.getElementById(inCam).innerHTML);
+        function showAlert(a_name) {
+            document.getElementById(a_name).classList.remove("alertHidden");
         }
+
+        // Buttons binding
+
+        document.getElementById('dis_pp').onclick = function() { hideAlert("alert_pp"); }
+        document.getElementById('act_pp').onclick = function() { settings(); hideAlert("alert_pp"); }
 
         document.getElementById('cam2').onclick = function() { swapCam("cam2"); }
         document.getElementById('cam1').onclick = function() { swapCam("cam1"); }
@@ -168,93 +240,111 @@
         document.getElementById('camPreview1').onclick = function() { swapPreviewCam("camPreview1"); }
         document.getElementById('camPreview3').onclick = function() { swapPreviewCam("camPreview3"); }
 
+        document.getElementById('camPC').onclick = function() { switchPC(); }
+        document.getElementById('saveSettings').onclick = function() {
+        	window.location.reload();
+        	eel.saveSettings(document.getElementById("switcher_1").value, document.getElementById("switcher_2").value, document.getElementById("flexSwitchCheckDefault").checked);
+        }
+
+        document.getElementById('settings').onclick = function() {
+        	document.getElementById(currentContainer).classList.add("hiddenContainer");
+        	document.getElementById('settingsConatiner').classList.remove("hiddenContainer");
+        	document.getElementById(currentNav).classList.remove("active");
+        	document.getElementById("settings").classList.add("active");
+        	currentNav = "settings";
+        	currentContainer = 'settingsConatiner';
+ 		}
+
+ 		document.getElementById('video').onclick = function() {
+        	document.getElementById(currentContainer).classList.add("hiddenContainer");
+        	document.getElementById('videoContainer').classList.remove("hiddenContainer");
+        	document.getElementById(currentNav).classList.remove("active");
+        	document.getElementById("video").classList.add("active");
+        	currentNav = "video";
+        	currentContainer = 'videoContainer';
+ 		}
+
+ 		$slider.on("input", setBar);
+
+<!--        setBar();-->
+
+        // Keys binding
+
         document.addEventListener('keydown', function(event) {
             if (event.code == 'Digit1') {
-                swapPreviewCam("camPreview1")
+                swapPreviewCam("camPreview1");
             }
             if (event.code == 'Digit2') {
-                swapPreviewCam("camPreview2")
+                swapPreviewCam("camPreview2");
 
             }
             if (event.code == 'Digit3') {
-                swapPreviewCam("camPreview3")
+                swapPreviewCam("camPreview3");
             }
             if (event.code == 'Space') {
-                var c = cCamName;
-                console.log(c);
-                swapCam("cam"+cPreviewCamName[cPreviewCamName.length - 1]);
-                swapPreviewCam('camPreview' + c[c.length - 1]);
+                previewToProgram();
             }
         });
 
-        var last_uid = "";
 
-        function activatePC() {
-            document.getElementById("camPC").classList.remove("bg-white");
-            document.getElementById("camPC").classList.add("bg-warning");
-            PC_Sate = true;
-        }
+        init();
 
-        function deactivatePC() {
-            document.getElementById("camPC").classList.remove("bg-warning");
-            document.getElementById("camPC").classList.add("bg-white");
-            PC_State = false;
-        }
+        // ProPresenter Link
 
-        function switchPC() {
-            if (!PC_Sate) 
-                activatePC();
-            else 
-                deactivatePC();
-        }
-
-        document.getElementById('camPC').onclick = function() { switchPC(); }
+        last_uid = null;
 
         function processProPresenterMessage(message) {
-            if (message['acn'] == "fv") {
-                if (last_uid!=message['ary'][0]['uid']){
-                    last_uid = message['ary'][0]['uid'];
-                    if (message['ary'][0]['txt'] != undefined && (message['ary'][2]['txt'] == "speaker" || message['ary'][0]['txt'] > 250) && message['ary'][0]['acn'] === 'cs' ) {
-                        console.log(message);
-                        console.log("Send to ATEM");
-                        activatePC();
-                    }
-                }
-            }
-        }
+             if (message['acn'] == "fv") {
+                 if (last_uid!=message['ary'][0]['uid']){
+                     last_uid = message['ary'][0]['uid'];
+                     if (message['ary'][0]['txt'] != undefined && (message['ary'][2]['txt'] == "speaker" || message['ary'][0]['txt'] > 250) && message['ary'][0]['acn'] === 'cs' ) {
+                         console.log(message);
+                         console.log("Send to ATEM");
+                         activatePC();
+                     }
+                 }
+             }
+         }
 
-        function connectToProPresenter() {
-            var proPresenterStageDisplayURL = 'ws://' + config['propresenter_ip'] + ':' + config['propresenter_port'] + '/stagedisplay';
-            
-            var ws = new WebSocket(proPresenterStageDisplayURL);
+         async function connectToProPresenter() {
+             const res  = await getJSON_Data();
 
-            ws.onopen = function() {
-                console.log('ProPresenter connection opened');
-                ws.send(JSON.stringify({
-                                        "pwd": config['propresenter_password'],
-                                        "ptl": 610,
-                                        "acn": "ath"
-                                       }));
-            };
+             if (!res['propresenter_linking'])
+                return false;
 
-            ws.onmessage = function(e) {
-                processProPresenterMessage(JSON.parse(e.data));
-            };
+             var proPresenterStageDisplayURL = 'ws://' + res['propresenter_ip'] + ':' + res['propresenter_port'] + '/stagedisplay';
 
-            ws.onclose = function(e) {
-                console.log('ProPresenter socket was closed. Attempting to reconnect in 1 second...', e.reason);
-                setTimeout(function() {
-                    connectToProPresenter();
-                }, 1000);
-            };
+             var ws = new WebSocket(proPresenterStageDisplayURL);
 
-            ws.onerror = function(err) {
-                console.error('ProPresenter socket has error: ', err.message, 'Closing socket');
-                ws.close();
-            };
-        }
+             ws.onopen = function() {
+                 console.log('ProPresenter connection opened');
+                 ws.send(JSON.stringify({
+                                         "pwd": res['propresenter_password'],
+                                         "ptl": 610,
+                                         "acn": "ath"
+                                        }));
+             };
 
-        connectToProPresenter();
-    </script>
+             ws.onmessage = function(e) {
+                 processProPresenterMessage(JSON.parse(e.data));
+             };
+
+             ws.onclose = function(e) {
+                 console.log('ProPresenter socket was closed. Attempting to reconnect in 1 second...', e.reason);
+                 setTimeout(function() {
+                     connectToProPresenter();
+                 }, 1000);
+             };
+
+             ws.onerror = function(err) {
+                 console.error('ProPresenter socket has error: ', err.message, 'Closing socket');
+                 showAlert("alert_pp");
+                 ws.close();
+             };
+         }
+
+        connectToProPresenter()
+
+	</script>
 </body>
 </html>
