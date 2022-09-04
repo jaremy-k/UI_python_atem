@@ -2,16 +2,20 @@ import eel
 import PyATEMMax as ate
 import json
 
+debug = False
 switcher = ate.ATEMMax()
+afk = False
 
 eel.init("web")
 
-switcher.connect('192.168.10.240')
+switcher.connect('192.168.10.245')
 
 @eel.expose
 def init():
-    return [2, 1, 0]
-    # return [switcher.previewInput[0].videoSource.value, switcher.programInput[0].videoSource.value, 0]
+    if (debug):
+        return [2, 1, 0]
+    else:
+        return [switcher.previewInput[0].videoSource.value-1, switcher.programInput[0].videoSource.value-1, 0]
 
 @eel.expose
 def saveSettings(switcher1_ip, switcher2_ip, pp_linking):
@@ -42,10 +46,17 @@ def setPreview(x):
 
 @eel.expose
 def setMixState(x):
-    print(x)
+    if switcher.connected == False:
+        switcher.connect(x)
+    switcher.setTransitionPosition(0, int(x))
 
+@eel.expose
+def beginAFK(x):
+    if switcher.connected == False:
+        switcher.connect(x)
+    print(int(x))
 
 try:
-    eel.start("index.html")
+    eel.start("index.html", port=8080)
 except Exception:
-    eel.start("index.html", mode='default')
+    eel.start("index.html", mode='default', port=8080)

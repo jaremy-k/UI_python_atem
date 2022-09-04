@@ -71,13 +71,21 @@
                         </button>
                     </div>
                 </div>
+                <div class="col pb-4">
+<!--                    <h5 class="pb-2 text-light">Program</h5>-->
+                    <div class="row">
+                        <button id="camAFK" class="shadow-sm deactiveC" tabindex="-1" style="width: 10vw; height: 10vw; font-size: 5vw; line-height: 6vw; text-align: center; align-content: center; justify-content: center;">
+                            AFK
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="col">
                 <div class="rounded" style="width: 7vw; height: 50vh;">
                     <div class="middle">
                         <div class="slider-container shadow-sm">
                             <span class="bar"><span class="fill"></span></span>
-                            <input id="slider" class="slider" type="range" min="0" max="100" value="0" >
+                            <input id="slider" class="slider" type="range" min="0" max="9999" value="0" >
                         </div>
                     </div>
                 </div>
@@ -129,6 +137,8 @@
      </div>
 	<script type="text/javascript">
 
+        var debug = false;
+
         async function getJSON_Data() {
           return fetch('config.JSON').then(res => res.json());
         }
@@ -157,7 +167,8 @@
             document.getElementById(inCam).classList.remove("deactiveC");
             document.getElementById(inCam).classList.add("activeC");
             document.getElementById(inCam).blur();
-            // eel.setProgram(inCam[inCam.length - 1]);
+            if (!debug)
+                eel.setProgram(inCam[inCam.length - 1]);
         }
 
         function swapPreviewCam(inCam, bSmooth = false) {
@@ -167,7 +178,8 @@
             document.getElementById(inCam).classList.remove("deactiveC");
             document.getElementById(inCam).classList.add("activeC");
             document.getElementById(inCam).blur();
-            // eel.setPreview(inCam[inCam.length - 1]);
+            if (!debug)
+                eel.setPreview(inCam[inCam.length - 1]);
         }
 
         function previewToProgram() {
@@ -181,6 +193,7 @@
             document.getElementById("camPC").classList.add("activePC");
             document.getElementById("camPC").blur();
             PC_State = true;
+           setTimeout(() => {eel.setProgram(1);}, 200);
         }
 
         function deactivatePC() {
@@ -188,6 +201,35 @@
             document.getElementById("camPC").classList.add("deactivePC");
             document.getElementById("camPC").blur();
             PC_State = false;
+            eel.setProgram(0);
+        }
+
+        AFK_State = false;
+
+        function activateAFK() {
+            document.getElementById("camAFK").classList.remove("deactivePC");
+            document.getElementById("camAFK").classList.add("activePC");
+            document.getElementById("camAFK").blur();
+            AFK_State = true;
+            var l = 0;
+            while (AFK_State){
+                l++;
+                eel.beginAFK(l);
+            }
+        }
+
+        function deactivateAFK() {
+            document.getElementById("camAFK").classList.remove("activePC");
+            document.getElementById("camAFK").classList.add("deactivePC");
+            document.getElementById("camAFK").blur();
+            AFK_State = false;
+        }
+
+         function switchAFK() {
+            if (!AFK_State)
+                activateAFK();
+            else
+                deactivateAFK();
         }
 
         function switchPC() {
@@ -215,7 +257,7 @@
         }
 
         function setBar() {
-            $fill.css("height", $slider.val() + "%");
+            $fill.css("height", $slider.val()/9999*100 + "%");
             eel.setMixState($slider.val());
         }
 
@@ -240,6 +282,7 @@
         document.getElementById('camPreview1').onclick = function() { swapPreviewCam("camPreview1"); }
         document.getElementById('camPreview3').onclick = function() { swapPreviewCam("camPreview3"); }
 
+        document.getElementById('camAFK').onclick = function() { switchAFK(); }
         document.getElementById('camPC').onclick = function() { switchPC(); }
         document.getElementById('saveSettings').onclick = function() {
         	window.location.reload();
@@ -301,6 +344,8 @@
                          console.log(message);
                          console.log("Send to ATEM");
                          activatePC();
+                     } else {
+                     deactivatePC();
                      }
                  }
              }
