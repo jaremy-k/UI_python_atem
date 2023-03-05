@@ -84,10 +84,10 @@ def beginAFK(x):
 settings = getSettingsFromJson()
 
 if not debug:
-    switcher1.connect(settings['Switcher 1'])
+    # switcher1.connect(settings['Switcher 1'])
     switcher2.connect(settings['Switcher 2'])
 
 try:
-    eel.start("index.html", port=8080)
+    eel.start("index.html", port=5700)
 except Exception:
-    eel.start("index.html", mode='default', port=8080)
+    eel.start("index.html", mode='default', port=5700)

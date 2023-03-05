@@ -1,0 +1,86 @@
+/*
+
+IF YOU'RE NOT FAMILIAR WITH CSS
+
+If you aren't familiar/comfortable with CSS, then I'd highly suggest checking out https://www.w3schools.com/css/default.asp
+I use their database of information on a regular bases, and it can help you get the exact look you want on this
+
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+@font-face {
+    font-family: 'NeueBoldItalic';
+    src: url("./HelveticaNeueCyr-BoldItalic.ttf");
+}
+
+@font-face {
+    font-family: 'NeueBold';
+    src: url("./HelveticaNeueCyr-Bold.ttf");
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-size: 10px;
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    overflow: hidden;
+}
+
+#headline {
+    font-size: 42px;
+    line-height: 45px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    font-family: 'NeueBoldItalic';
+    text-transform: uppercase;
+}
+
+#song {
+    font-size: 42px;
+    line-height: 42px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    font-family: 'NeueBoldItalic';
+    text-transform: uppercase;
+}
+
+#cs {
+    font-family: 'NeueBold';
+    max-width: 1400px;
+    padding: 0 0.5em;
+    font-size: 42px;
+    line-height: 42px;
+    letter-spacing: 1px;
+    bottom: 0;
+    font-weight: 700;
+    text-transform: none;
+    text-shadow: 1px 1px 4px #919191;
+    //border: 2px solid #fff;
+    //background: rgba(0,0,0,0.4);
+    //border-bottom: 2px solid #fff;
+    //border-left: 2px solid #fff;
+    word-wrap: break-word;
+    /*background: linear-gradient(135deg, #6DD5FA 20%, #FFFFFF 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;*/
+    overflow: hidden;
+}
+
+.b {
+    /*border: 3px solid transparent;
+    border-image: linear-gradient(135deg, #6DD5FA 20%, #FFFFFF 70%);
+    border-image-slice: 1;*/
+}
+
+#d {
+    /*background: rgba(0,0,0,0.8); padding: 0;*/
+}
+
+.collapsed {
+    block: none; !important;
+    visibility: hidden; !important;
+}

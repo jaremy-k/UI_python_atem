@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="stylesheet.css">
+<script type="text/javascript" src="lib/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="config.js"></script>
+<script type="text/javascript" src="/eel.js"></script>
+<script type="text/javascript">
+
+
+prev_text = '';
+
+function defaultShow(message) {
+    // replace carriage return \r and linefeed \n with <br> global
+    text = message['ary'][0]['txt'].replace(/\r\n|\r/g, ' ');
+    text = text.replace(/\n/g, '<br/>');
+    //text = message['ary'][0]['txt'].replace(/\r\n|\n|\r/g, '<br />');
+
+    // if fading is true and repeated text is true
+    if (prev_text !== text || config['fade_repeated_text']) {
+        // if fading is true
+        if (config['fade']) {
+            $("#d").fadeOut(config["fade_speed"]);
+            $("#b").fadeOut(config["fade_speed"]);
+            $("#cs").fadeOut(config["fade_speed"], function() {
+                $("#cs").html(text);
+                document.getElementById("b").classList.add("b");
+                $("#b").fadeIn(config["fade_speed"]);
+                $("#d").fadeIn(config["fade_speed"]);
+                $("#cs").fadeIn(config["fade_speed"]);
+            });
+        }
+        // no fade
+        else {
+            document.getElementById("b").classList.add("b");
+            $("#cs").html(text);
+        }
+    }
+}
+
+function showVerse(message) {
+    // replace carriage return \r and linefeed \n with <br> global
+    text = message['ary'][0]['txt'];
+    if (text.length > 250)
+        return False;
+    arr = text.split(/\r\n|\r/g);
+    arr[0] = arr[0].replace(/\n/g, ' ');
+    if (arr[1])
+        arr[1] = arr[1].replace(/\n/g, ' ');
+    else
+        arr[1]="";
+    //text = text.replace(/\n/g, '<br/>');
+    //text = message['ary'][0]['txt'].replace(/\r\n|\n|\r/g, '<br />');
+
+    console.log(arr);
+    // if fading is true and repeated text is true
+    if (prev_text !== text || config['fade_repeated_text']) {
+        // if fading is true
+        if (config['fade']) {
+            $("#d").fadeOut(config["fade_speed"]);
+            $("#b").fadeOut(config["fade_speed"]);
+            $("#cs").fadeOut(config["fade_speed"], function() {
+                $("#cs").html("<p id='headline'>" + arr[0] + "</p>" + arr[1]);
+                document.getElementById("b").classList.add("b");
+                $("#b").fadeIn(config["fade_speed"]);
+                $("#d").fadeIn(config["fade_speed"]);
+                $("#cs").fadeIn(config["fade_speed"]);
+            });
+        }
+        // no fade
+        else {
+            document.getElementById("b").classList.add("b");
+            $("#cs").html("<h2>" + arr[0] + "<h2/>" + arr[1]);
+        }
+    }
+}
+
+function showSong(message) {
+    // replace carriage return \r and linefeed \n with <br> global
+    text = message['ary'][0]['txt'].replace(/\r\n|\n|\r/g, '<br />');
+
+    // if fading is true and repeated text is true
+    if (prev_text !== text || config['fade_repeated_text']) {
+        // if fading is true
+        if (config['fade']) {
+            $("#d").fadeOut(config["fade_speed"]);
+            $("#b").fadeOut(config["fade_speed"]);
+            $("#cs").fadeOut(config["fade_speed"], function() {
+                $("#cs").html("<p id='song'>" + text + "</p>");
+                document.getElementById("b").classList.add("b");
+                $("#b").fadeIn(config["fade_speed"]);
+                $("#d").fadeIn(config["fade_speed"]);
+                $("#cs").fadeIn(config["fade_speed"]);
+            });
+        }
+        // no fade
+        else {
+            document.getElementById("b").classList.add("b");
+            $("#cs").html("<p id='song'>" + text + "</p>");
+        }
+    }
+}
+
+function processProPresenterMessage(message) {
+
+    /* enable this to view Array of data in the console. */
+    /*
+    if (message['acn'] != "vid") {
+        console.log(message);
+    }
+    */
+
+    // only parse fv arrays
+    if (message['acn'] == "fv") {
+        if (message['ary'][0]['txt'] != undefined && message['ary'][0]['acn'] === 'cs') {
+            var text = '';
+	           console.log(message);
+            // check slide note for noText keyword.  If noText is defined dont step into this IF
+            if (typeof message['ary'][2] !== 'undefined' && message['ary'][2]['txt'] !== config["noText"]) {
+                switch(message['ary'][2]['txt']) {
+                    case 'song':
+                        showSong(message);
+                        break;
+                    case 'verse':
+                        showVerse(message);
+                        break;
+                    default:
+                        showVerse(message);
+                        break;
+                }
+            }
+            // noText keyword was defined on slide note so set #cs to blank
+            else{
+                document.getElementById("b").classList.remove("b");
+                $("#cs").html("");
+            }
+            prev_text = text;
+        }
+    }
+}
+
+function findServers(port, ipBase, ipLow, ipHigh, maxInFlight, timeout, cb) {
+    var ipCurrent = +ipLow, numInFlight = 0, servers = [];
+    ipHigh = +ipHigh;
+
+    function tryOne(ip) {
+        ++numInFlight;
+        var address = "ws://" + ipBase + ip + ":" + port  + '/stagedisplay';
+        var socket = new WebSocket(address);
+        var timer = setTimeout(function() {
+            console.log(address + " timeout");
+            var s = socket;
+            socket = null;
+            s.close();
+            --numInFlight;
+            next();
+        }, timeout);
+        socket.onopen = function() {
+            if (socket) {
+                console.log(address + " success");
+                clearTimeout(timer);
+                servers.push(socket.url);
+                --numInFlight;
+                next();
+            }
+        };
+        socket.onerror = function(err) {
+            if (socket) {
+                console.log(address + " error");
+                clearTimeout(timer);
+                --numInFlight;
+                next();
+            }
+        }
+    }
+
+    function next() {
+        while (ipCurrent <= ipHigh && numInFlight < maxInFlight && (servers.length == 0)) {
+            tryOne(ipCurrent++);
+        }
+        // if we get here and there are no requests in flight, then
+        // we must be done
+        if (numInFlight === 0) {
+            console.log(servers);
+            cb(servers);
+        }
+    }
+
+    next();
+}
+
+findServers(config['propresenter_port'], config['subnet'], 1, 255, 20, 4000, function(servers) {
+    console.log(servers);
+    connectToProPresenter(servers[0])
+
+});
+
+function connectToProPresenter(server) {
+    var proPresenterStageDisplayURL = server;
+
+    ws = new WebSocket(server);
+
+    ws.onopen = function() {
+        console.log('ProPresenter connection opened');
+        ws.send(JSON.stringify({
+                                "pwd": config['propresenter_password'],
+                                "ptl": 610,
+                                "acn": "ath"
+                               }));
+    };
+
+    ws.onmessage = function(e) {
+        processProPresenterMessage(JSON.parse(e.data));
+    };
+
+    ws.onclose = function(e) {
+        console.log('ProPresenter socket was closed. Attempting to reconnect in 1 second...', e.reason);
+        setTimeout(function() {
+            connectToProPresenter(server);
+        }, 1000);
+    };
+
+    ws.onerror = function(err) {
+        console.error('ProPresenter socket has error: ', err.message, 'Closing socket');
+        ws.close();
+    };
+}
+
+eel.expose(hideText); // Expose this function to Python
+function hideText(x) {
+    console.log(x);
+    if (x) {
+        document.getElementById("atem").classList.add('collapsed');
+    } else {
+        document.getElementById("atem").classList.remove('collapsed');
+    }
+}
+
+// connectToProPresenter();
+
+</script>
+</head>
+
+<body style="width: 100vw;">
+    <div style="width: 100%; position: absolute; bottom: 50px; left: 0px;">
+      <div class="row justify-content-md-center" id="atem">
+        <div class="col-md-auto" id="d">
+            <div id="b"><div id="cs"></div></div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
